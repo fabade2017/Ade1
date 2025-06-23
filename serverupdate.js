@@ -468,9 +468,9 @@ const token = crypto.randomInt(10000, 999999);
                 auth: { user: 'fabade2017@gmail.com', pass: 'mixpyxrlcjbhcvxz' } //user: 'adeolu.emmanuel80@gmail.com', pass: 'Theone007@@'
             });
 
-            const resetLink = `https://institutionconnect.com/usersms/reset-password/${token}`;
+            const resetLink = `https://ic.up.railway.app/usersms/reset-password/${token}`;
 transporter.sendMail({
-                 from: 'support@instituteconnect.com', 
+                 from: 'support@ic.up.railway.app', 
                 to: email,
                 subject: 'Reset Password',
                 html: `<p>Please Change your password by entering the valid code "${token}" and your new password. This link expires in 1 hr.</p>`
@@ -841,7 +841,7 @@ app.post('/usersms/register', async (req, res) => {
                 auth: { user: 'fabade2017@gmail.com', pass: 'mixpyxrlcjbhcvxz' } //user: 'adeolu.emmanuel80@gmail.com', pass: 'Theone007@@'
             });
 
-            const verificationLink = `https://institutionconnect.com/usersms/verify-email/${verificationToken}`;
+            const verificationLink = `https://ic.up.railway.app/usersms/verify-email/${verificationToken}`;
 
             transporter.sendMail({
                  from: 'support@instituteconnect.com', 
@@ -985,7 +985,7 @@ app.post('/usersms/resend-verification', (req, res) =>  {
                                 }
                             });
 
-                    const verificationLink = `https://institutionconnect.com/usersms/verify-email/${verificationToken}`; 
+                    const verificationLink = `https://ic.up.railway.app/usersms/verify-email/${verificationToken}`; 
 
                     await transporter.sendMail({ 
                         from: 'support@instituteconnect.com', 
@@ -1158,7 +1158,7 @@ const upload = multer({ storage });
 app.post('/usersms/user_update',  authenticate,  upload.single('profile_image'), async (req, res) => {
     const {name, email, role, institution_id, department_id, bio, username, phone } = req.body;  
     const id = req.user.id;
-    const profile_image = req.file ?  "https://institutionconnect.com/usersms/uploadimage/"+ id  + path.extname(req.file.originalname) : null;//   const profile_image = req.file ? req.file.filename : null;
+    const profile_image = req.file ?  "https://ic.up.railway.app/usersms/uploadimage/"+ id  + path.extname(req.file.originalname) : null;//   const profile_image = req.file ? req.file.filename : null;
 
     if (!id) return res.status(400).json({ error: 'User ID is required.' });
 
@@ -1242,15 +1242,15 @@ db.query('SELECT 1 FROM filemanager WHERE userid = ?', [userid], (err, rows) => 
       if (err) return res.status(500).json({ error: err.message });
              // Extract files
     const file1 = req.files['file1']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_file1${path.extname(req.files['file1'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_file1${path.extname(req.files['file1'][0].originalname)}`
       : null;
 
     const file2 = req.files['file2']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_file2${path.extname(req.files['file2'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_file2${path.extname(req.files['file2'][0].originalname)}`
       : null;
 
     const others = req.files['others']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_others${path.extname(req.files['others'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_others${path.extname(req.files['others'][0].originalname)}`
       : null;
 
     // Build update fields
@@ -1278,15 +1278,15 @@ db.query('SELECT 1 FROM filemanager WHERE userid = ?', [userid], (err, rows) => 
   {
         // Extract files
     const file1 = req.files['file1']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_file1${path.extname(req.files['file1'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_file1${path.extname(req.files['file1'][0].originalname)}`
       : null;
 
     const file2 = req.files['file2']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_file2${path.extname(req.files['file2'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_file2${path.extname(req.files['file2'][0].originalname)}`
       : null;
 
     const others = req.files['others']
-      ? `https://institutionconnect.com/usersms/uploadcred/${userid}_others${path.extname(req.files['others'][0].originalname)}`
+      ? `https://ic.up.railway.app/usersms/uploadcred/${userid}_others${path.extname(req.files['others'][0].originalname)}`
       : null;
 
     // Build update fields
@@ -1380,7 +1380,7 @@ db.query('SELECT 1 FROM filemanager WHERE userid = ?', [userid], (err, rows) => 
     db.query(sql, values, (err, results) => {
         if (err) return res.json({ error: err.message });
 
-       // const verificationLink = `https://institutionconnect.com/usersms/verify-email/${verificationToken}`;
+       // const verificationLink = `https://ic.up.railway.app/usersms/verify-email/${verificationToken}`;
 
         transporter.sendMail({
             from: 'support@instituteconnect.com',
@@ -1544,7 +1544,7 @@ app.get('/usersms/privacy/list', (req, res) => {
 //                 auth: { user: 'fabade2017@gmail.com', pass: 'mixpyxrlcjbhcvxz' } //user: 'adeolu.emmanuel80@gmail.com', pass: 'Theone007@@'
 //             });
 
-//             const verificationLink = `https://institutionconnect.com/usersms/verify-email/${verificationToken}`;
+//             const verificationLink = `https://ic.up.railway.app/usersms/verify-email/${verificationToken}`;
 
 //             transporter.sendMail({
 //                  from: 'support@instituteconnect.com', 
