@@ -1,0 +1,22 @@
+{
+  "name": "user-management-service",
+  "version": "1.0.0",
+  "description": "Microservice for user authentication and management",
+  "main": "serverupdate.js",
+  "scripts": {
+    "start": "/home/instcsox/nodevenv/iconnectxs/20/bin/node serverupdate.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^2.0.0",
+    "mysql2": "^3.2.0",
+    "nodemailer": "^6.9.1",
+    "nodemon": "^2.0.4",
+    "swagger-jsdoc": "^4.2.0",
+    "swagger-ui-express": "^4.1.4"
+  }
+}

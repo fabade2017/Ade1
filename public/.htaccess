@@ -1,0 +1,5 @@
+PassengerAppRoot "/home/instcsox/usersms"
+PassengerBaseURI "/usersms"
+PassengerNodejs "/home/instcsox/nodevenv/usersms/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server1.js

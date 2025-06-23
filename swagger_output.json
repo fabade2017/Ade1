@@ -1,0 +1,3091 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "InstituteConnect 2 API",
+      "version": "1.0.0",
+      "description": "Detailed API for InstituteConnect 2"
+    },
+    "servers": [
+      {
+        "url": "https://institutionconnect.com",
+        "description": "Production server"
+      },
+      {
+        "url": "http://localhost:7000",
+        "description": "Local development server"
+      }
+    ],
+    "paths": {
+      "/usersms/login": {
+        "post": {
+          "summary": "User login",
+          "description": "Authenticates a user and returns a JWT token.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "password": { "type": "string" }
+                  },
+                  "required": ["email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful login, returns JWT token and user ID.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "token": { "type": "string" },
+                      "user_id": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid credentials or user not found/verified.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/institutions": {
+        "get": {
+          "summary": "Fetch all institutions (paginated)",
+          "description": "Retrieves a paginated list of institutions.",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "schema": { "type": "integer", "default": 1 },
+              "description": "Page number to retrieve."
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "schema": { "type": "integer", "default": 10 },
+              "description": "Maximum number of institutions per page."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A paginated list of institutions.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "currentPage": { "type": "integer" },
+                      "totalPages": { "type": "integer" },
+                      "totalRecords": { "type": "integer" },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "name": { "type": "string" },
+                            "type": { "type": "string" },
+                            "location": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new institution",
+          "description": "Creates a new institution.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "string" },
+                    "location": { "type": "string" }
+                  },
+                  "required": ["name", "type", "location"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Institution created successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" },
+                      "id": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/institutions/{id}": {
+        "put": {
+          "summary": "Update an institution",
+          "description": "Updates an existing institution.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "ID of the institution to update."
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "string" },
+                    "location": { "type": "string" }
+                  },
+                  "required": ["name", "type", "location"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Institution updated successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Institution not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete an institution",
+          "description": "Deletes an institution by ID.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "ID of the institution to delete."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Institution deleted successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Institution not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/institutions_type/{type}": {
+        "get": {
+          "summary": "Fetch institutions by type",
+          "description": "Retrieves institutions filtered by their type.",
+          "parameters": [
+            {
+              "name": "type",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "Type of institution to retrieve (e.g., 'university', 'company')."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Institutions fetched successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "name": { "type": "string" },
+                            "type": { "type": "string" },
+                            "location": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/users": {
+        "get": {
+          "summary": "Fetch users with filtering",
+          "description": "Retrieves users, optionally filtered by role and institution ID.",
+          "parameters": [
+            {
+              "name": "role",
+              "in": "query",
+              "schema": { "type": "string" },
+              "description": "Filter users by role."
+            },
+            {
+              "name": "institution_id",
+              "in": "query",
+              "schema": { "type": "string" },
+              "description": "Filter users by institution ID."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of users.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "name": { "type": "string" },
+                        "email": { "type": "string" },
+                        "role": { "type": "string" },
+                        "institution_id": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
+        }
+      },
+      "/usersms/change-password": {
+        "post": {
+          "summary": "Change password",
+          "description": "Allows a user to change their password.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "oldPassword": { "type": "string" },
+                    "newPassword": { "type": "string" }
+                  },
+                  "required": ["oldPassword", "newPassword"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password updated successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Incorrect old password or user not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+       "/usersms/users/profile": {
+        "get": {
+          "summary": "Get user profile",
+          "description": "Retrieves the profile information of the currently authenticated user.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User profile information.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "full_name": { "type": "string" },
+                      "email": { "type": "string" },
+                      "role": { "type": "string" },
+                      "institution": { "type": "string" },
+                       "profile_image": { "type": "string", "nullable": true }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/forgot-password": {
+        "post": {
+          "summary": "Request password reset",
+          "description": "Initiates the password reset process by sending a reset link to the user's email.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" }
+                  },
+                  "required": ["email"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset link sent.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Email not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/reset-password": {
+        "post": {
+          "summary": "Reset password",
+          "description": "Resets the user's password after verifying the reset token.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "newPassword": { "type": "string" }
+                  },
+                  "required": ["token", "newPassword"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset successful.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid or expired token.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+       "/usersms/validate-reset-password": {
+        "post": {
+          "summary": "Validate reset password",
+          "description": "Validate the reset password token and email.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "email": { "type": "string" }
+                  },
+                  "required": ["token", "email"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Token and email are valid.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid or expired token or Invalid email.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usersms/stats": {
+        "get": {
+          "summary": "Fetch dashboard statistics",
+          "description": "Retrieves statistics for the dashboard, including user counts by role and institution counts by type.",
+        "responses": {
+          "200": {
+            "description": "Dashboard statistics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "students": { "type": "integer" },
+                    "lecturers": { "type": "integer" },
+                    "admins": { "type": "integer" },
+                    "universities": { "type": "integer" },
+                    "companies": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/interests": {
+      "post": {
+        "summary": "Add user interests",
+        "description": "Adds interests for the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "interests": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["interests"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Interests added successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Interests must be a non-empty array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/users/profiler": {
+      "get": {
+        "summary": "Get user profile with interests",
+        "description": "Retrieves the profile information of the authenticated user, including their interests.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile with interests.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "full_name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "role": { "type": "string" },
+                    "institution": { "type": "string" },
+                    "departmentName": { "type": "string", "nullable": true },
+                    "profile_image": { "type": "string", "nullable": true },
+                    "interests": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/usersms/users/profilegroup": {
+      "post": {
+        "summary": "Get profiles of multiple users",
+        "description": "Retrieves profiles of multiple users based on an array of user IDs.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_ids": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["user_ids"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Array of user profiles with interests.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "email": { "type": "string" },
+                      "role": { "type": "string" },
+                      "institution": { "type": "string" },
+                      "departmentName": { "type": "string", "nullable": true },
+                      "profile_image": { "type": "string", "nullable": true },
+                      "interests": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user_ids array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/users/{id}/interests": {
+      "get": {
+        "summary": "Get user interests by ID",
+        "description": "Retrieves the interests of a specific user by their ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the user to retrieve interests for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of user interests.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interests": {
+      "put": {
+        "summary": "Update user interests",
+        "description": "Updates the interests of the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "interests": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["interests"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Interests updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Interests must be a non-empty array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/validate-token": {
+      "post": {
+        "summary": "Validate JWT token",
+        "description": "Validates a JWT token and returns user information if valid.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string" },
+                   "email": { "type": "string" }
+                },
+                "required": ["token"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token is valid, returns user data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "full_name": { "type": "string" },
+                        "email": { "type": "string" },
+                        "role": { "type": "string" },
+                        "institution": { "type": "string" },
+                        "expires_at": { "type": "string", "format": "date-time" },
+                         "profile_image": { "type": "string", "nullable": true }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interests/{interest}": {
+      "delete": {
+        "summary": "Delete a user interest",
+        "description": "Deletes a specific interest for the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "interest",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The interest to delete."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Interest deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Interest not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/logout": {
+      "post": {
+        "summary": "Logout",
+        "description": "Logs out the user (handled client-side by removing the token).",
+        "responses": {
+          "200": {
+            "description": "Logout successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Registers a new user with the provided details.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "role": { "type": "string" },
+                  "institution_id": { "type": "string" },
+                  "department_id": { "type": "string", "nullable": true }
+                },
+                "required": ["name", "email", "password", "role", "institution_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Registration error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/verify-email": {
+      "post": {
+        "summary": "Verify user email",
+        "description": "Verifies a user's email using a verification token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string" },
+                   "email": { "type": "string" }
+                },
+                "required": ["token", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/usersms/resend-verification": {
+      "post": {
+        "summary": "Resend verification email",
+        "description": "Resends the email verification to the user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found or already verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/departments": {
+      "post": {
+        "summary": "Create a department",
+        "description": "Creates a new department.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {"name": { "type": "string" },
+                  "institution_id": { "type": "string" }
+                },
+                "required": ["name", "institution_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Department created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Department creation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/departments/{id}": {
+      "get": {
+        "summary": "Get a department by ID",
+        "description": "Retrieves a department by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the department to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Department retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "institution_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Department not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a department",
+        "description": "Updates an existing department.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the department to update."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "institution_id": { "type": "string" }
+                },
+                "required": ["name", "institution_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Department updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Department not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a department",
+        "description": "Deletes a department by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the department to delete."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Department deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Department not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/usersms/departments/institution/{institutionId}": {
+      "get": {
+        "summary": "Get departments by institution ID",
+        "description": "Retrieves departments belonging to a specific institution.",
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the institution to retrieve departments for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Departments retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "institution_id": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No departments found for the given institution.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  "/usersms/privacy/{userId}": {
+    "get": {
+      "summary": "Get privacy settings for a user",
+      "tags": ["Privacy Settings"],
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Privacy settings for the user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "UserId": {
+                    "type": "integer",
+                    "description": "User ID"
+                  },
+                  "ProfileVisibility": {
+                    "type": "string",
+                    "description": "Profile visibility setting"
+                  },
+                  "SearchVisibility": {
+                    "type": "boolean",
+                    "description": "Search visibility setting"
+                  },
+                  "TaggingPermissions": {
+                    "type": "string",
+                    "description": "Tagging permissions setting"
+                  },
+                  "DirectMessages": {
+                    "type": "string",
+                    "description": "Direct message setting"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "userId is required"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Privacy settings not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Privacy settings not found for this user."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/usersms/privacy/update": {
+    "post": {
+      "summary": "Update privacy settings",
+      "tags": ["Privacy Settings"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "integer",
+                  "description": "User ID"
+                },
+                "profileVisibility": {
+                  "type": "string",
+                  "description": "Profile visibility setting"
+                },
+                "searchVisibility": {
+                  "type": "boolean",
+                  "description": "Search visibility setting"
+                },
+                "taggingPermissions": {
+                  "type": "string",
+                  "description": "Tagging permissions setting"
+                },
+                "directMessages": {
+                  "type": "string",
+                  "description": "Direct message setting"
+                }
+              },
+              "required": ["userId"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Privacy settings updated successfully",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Privacy settings updated."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "userId is required"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  
+  "/usersms/search-users": {
+    "post": {
+      "tags": ["Users"],
+      "summary": "Search users by department, institution, and interests",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["user_id", "criteria"],
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "12345"
+                },
+                "criteria": {
+                  "type": "object",
+                  "properties": {
+                    "departmentID": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "institutionID": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "interests": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["AI", "Data Science"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A list of matching users",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john@example.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "student"
+                    },
+                    "department_id": {
+                      "type": "integer"
+                    },
+                    "institution_id": {
+                      "type": "integer"
+                    },
+                    "profile_image": {
+                      "type": "string",
+                      "example": "/images/user1.png"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Missing required fields"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+
+},
+"/usersms/user_update": {
+    "post": {
+      "tags": ["Users"],
+      "summary": "Update user details and send confirmation email",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "email",
+                "role",
+                "institution_id",
+                "department_id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Jane Smith"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jane@example.com"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "teacher"
+                },
+                "institution_id": {
+                  "type": "integer",
+                  "example": 5
+                },
+                "department_id": {
+                  "type": "integer",
+                  "example": 3
+                },
+                "profile_image": {
+                  "type": "string",
+                  "example": "/uploads/profile/jane.png"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "User updated and email sent successfully",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "User updated and email sent successfully."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Missing required fields"
+        },
+        "500": {
+          "description": "Update or email failed"
+        }
+      }
+    }
+  },
+ "/usersms/login_activity": {
+      "post": {
+        "summary": "Record user login activity",
+        "description": "This endpoint records user login details such as IP address, computer details, and browser information.",
+        "operationId": "recordLoginActivity",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user"
+                  },
+                  "computerName": {
+                    "type": "string",
+                    "description": "The name of the user's computer"
+                  },
+                  "computerType": {
+                    "type": "string",
+                    "description": "The type of the user's computer (e.g., laptop, desktop)"
+                  },
+                  "operatingSystem": {
+                    "type": "string",
+                    "description": "The operating system of the user's computer"
+                  },
+                  "browser": {
+                    "type": "string",
+                    "description": "The browser used for the login"
+                  }
+                },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login activity recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login activity recorded"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (userId is required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "userId is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+  "/usersms/privacy/list": {
+    "get": {
+      "summary": "Get privacy settings with pagination and filtering",
+      "tags": ["Privacy Settings"],
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "description": "Page number",
+          "schema": {
+            "type": "integer",
+            "default": 1
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Number of items per page",
+          "schema": {
+            "type": "integer",
+            "default": 10
+          }
+        },
+        {
+          "name": "profileVisibility",
+          "in": "query",
+          "description": "Filter by profile visibility",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "searchVisibility",
+          "in": "query",
+          "description": "Filter by search visibility (true/false)",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "List of privacy settings",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "integer",
+                    "description": "Current page number"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of items per page"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "UserId": {
+                          "type": "integer",
+                          "description": "User ID"
+                        },
+                        "ProfileVisibility": {
+                          "type": "string",
+                          "description": "Profile visibility setting"
+                        },
+                        "SearchVisibility": {
+                          "type": "boolean",
+                          "description": "Search visibility setting"
+                        },
+                        "TaggingPermissions": {
+                          "type": "string",
+                          "description": "Tagging permissions"
+                        },
+                         "DirectMessages": {
+                          "type": "string",
+                          "description": "Direct messages"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, 
+   "/usersms/privacy/{userId}": {
+    "get": {
+      "summary": "Get privacy settings for a user",
+      "tags": ["Privacy Settings"],
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Privacy settings for the user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "UserId": {
+                    "type": "integer",
+                    "description": "User ID"
+                  },
+                  "ProfileVisibility": {
+                    "type": "string",
+                    "description": "Profile visibility setting"
+                  },
+                  "SearchVisibility": {
+                    "type": "boolean",
+                    "description": "Search visibility setting"
+                  },
+                  "TaggingPermissions": {
+                    "type": "string",
+                    "description": "Tagging permissions setting"
+                  },
+                  "DirectMessages": {
+                    "type": "string",
+                    "description": "Direct message setting"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "userId is required"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Privacy settings not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Privacy settings not found for this user."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/usersms/privacy/update": {
+    "post": {
+      "summary": "Update privacy settings",
+      "tags": ["Privacy Settings"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "integer",
+                  "description": "User ID"
+                },
+                "profileVisibility": {
+                  "type": "string",
+                  "description": "Profile visibility setting"
+                },
+                "searchVisibility": {
+                  "type": "boolean",
+                  "description": "Search visibility setting"
+                },
+                "taggingPermissions": {
+                  "type": "string",
+                  "description": "Tagging permissions setting"
+                },
+                "directMessages": {
+                  "type": "string",
+                  "description": "Direct message setting"
+                }
+              },
+              "required": ["userId"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Privacy settings updated successfully",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Privacy settings updated."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "userId is required"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  
+  "/usersms/search-users": {
+    "post": {
+      "tags": ["Users"],
+      "summary": "Search users by department, institution, and interests",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["user_id", "criteria"],
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "12345"
+                },
+                "criteria": {
+                  "type": "object",
+                  "properties": {
+                    "departmentID": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "institutionID": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "interests": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["AI", "Data Science"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A list of matching users",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john@example.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "student"
+                    },
+                    "department_id": {
+                      "type": "integer"
+                    },
+                    "institution_id": {
+                      "type": "integer"
+                    },
+                    "profile_image": {
+                      "type": "string",
+                      "example": "/images/user1.png"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Missing required fields"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+
+},
+"/usersms/user_update": {
+    "post": {
+      "tags": ["Users"],
+      "summary": "Update user details and send confirmation email",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "email",
+                "role",
+                "institution_id",
+                "department_id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Jane Smith"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jane@example.com"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "teacher"
+                },
+                "institution_id": {
+                  "type": "integer",
+                  "example": 5
+                },
+                "department_id": {
+                  "type": "integer",
+                  "example": 3
+                },
+                "profile_image": {
+                  "type": "string",
+                  "example": "/uploads/profile/jane.png"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "User updated and email sent successfully",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "User updated and email sent successfully."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Missing required fields"
+        },
+        "500": {
+          "description": "Update or email failed"
+        }
+      }
+    }
+  },
+ "/usersms/login_activity": {
+      "post": {
+         "tags": ["Login Activities"],
+        "summary": "Record user login activity",
+        "description": "This endpoint records user login details such as IP address, computer details, and browser information.",
+        "operationId": "recordLoginActivity",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user"
+                  },
+                  "computerName": {
+                    "type": "string",
+                    "description": "The name of the user's computer"
+                  },
+                  "computerType": {
+                    "type": "string",
+                    "description": "The type of the user's computer (e.g., laptop, desktop)"
+                  },
+                  "operatingSystem": {
+                    "type": "string",
+                    "description": "The operating system of the user's computer"
+                  },
+                  "browser": {
+                    "type": "string",
+                    "description": "The browser used for the login"
+                  },
+                  "location": {
+                    "type": "string",
+                    "description": "The location of user login"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "The device used by user"
+                  }
+                },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login activity recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login activity recorded"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (userId is required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "userId is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/logins/{userId}": {
+      "get": {
+          "tags": ["Login Activities"],
+        "summary": "Get login activities for a user",
+        "description": "Fetches login activities for a given user, with pagination support.",
+        "operationId": "getUserLoginActivities",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "description": "Number of records to return"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "description": "Offset for pagination"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login activities retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "UserId": { "type": "string" },
+                      "LoginTime": { "type": "string", "format": "date-time" },
+                      "IPAddress": { "type": "string" },
+                      "ComputerName": { "type": "string" },
+                      "ComputerType": { "type": "string" },
+                      "OperatingSystem": { "type": "string" },
+                      "Browser": { "type": "string" },
+                      "device": { "type": "string" },
+                      "location": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/logins/{userId}/filter": {
+      "get": {
+          "tags": ["Login Activities"],
+        "summary": "Get filtered login activities for a user",
+        "description": "Fetches login activities for a user within a date range, with pagination support.",
+        "operationId": "getUserLoginActivitiesFiltered",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Start date in YYYY-MM-DD format"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "description": "Number of records to return"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "description": "Offset for pagination"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered login activities retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "UserId": { "type": "string" },
+                      "LoginTime": { "type": "string", "format": "date-time" },
+                      "IPAddress": { "type": "string" },
+                      "ComputerName": { "type": "string" },
+                      "ComputerType": { "type": "string" },
+                      "OperatingSystem": { "type": "string" },
+                      "Browser": { "type": "string" },
+                      "device": { "type": "string" },
+                      "location": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing startDate or endDate query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "startDate and endDate are required in YYYY-MM-DD format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/recent": {
+      "get": {
+          "tags": ["Login Activities"],
+        "summary": "Get recent login activities",
+        "description": "Fetches the most recent login activities for each user, with pagination support.",
+        "operationId": "getRecentLoginActivities",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "description": "Number of records to return"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "description": "Offset for pagination"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recent login activities retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "UserId": { "type": "string" },
+                      "LoginTime": { "type": "string", "format": "date-time" },
+                      "IPAddress": { "type": "string" },
+                      "ComputerName": { "type": "string" },
+                      "ComputerType": { "type": "string" },
+                      "OperatingSystem": { "type": "string" },
+                      "Browser": { "type": "string" },
+                      "device": { "type": "string" },
+                      "location": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usersms/count_user_activity": {
+      "get": {
+          "tags": ["Login Activities"],
+        "summary": "Get login count for each user",
+        "description": "Fetches the login count for each user within a specified date range, with pagination support.",
+        "operationId": "getLoginCounts",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Start date in YYYY-MM-DD format"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "description": "Number of records to return"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "description": "Offset for pagination"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login counts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "UserId": { "type": "string" },
+                      "LoginCount": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing startDate or endDate query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "startDate and endDate are required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Database error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "/usersms/users/profilers": {
+      "get": {
+        "summary": "Get users in same department or institution with interests",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users with interests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "interests": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "Machine Learning"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  
+    "/usersms/credentials_update": { 
+      "post": {
+        "tags": ["Users"],
+        "summary": "Upload or update user credentials",
+        "description": "Uploads credential files and updates or inserts user metadata into the database.",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "file1",
+            "in": "formData",
+            "description": "First credential file",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "file2",
+            "in": "formData",
+            "description": "Second credential file",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "others",
+            "in": "formData",
+            "description": "Other supporting documents",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "description": "User role",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tin",
+            "in": "formData",
+            "description": "Tax Identification Number",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "description": "Account status",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+     ,
+  "/usersms/privacy/list": {
+    "get": {
+        
+      "summary": "Get privacy settings with pagination and filtering",
+      "tags": ["Privacy Settings"],
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "description": "Page number",
+          "schema": {
+            "type": "integer",
+            "default": 1
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Number of items per page",
+          "schema": {
+            "type": "integer",
+            "default": 10
+          }
+        },
+        {
+          "name": "profileVisibility",
+          "in": "query",
+          "description": "Filter by profile visibility",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "searchVisibility",
+          "in": "query",
+          "description": "Filter by search visibility (true/false)",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "List of privacy settings",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "integer",
+                    "description": "Current page number"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of items per page"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "UserId": {
+                          "type": "integer",
+                          "description": "User ID"
+                        },
+                        "ProfileVisibility": {
+                          "type": "string",
+                          "description": "Profile visibility setting"
+                        },
+                        "SearchVisibility": {
+                          "type": "boolean",
+                          "description": "Search visibility setting"
+                        },
+                        "TaggingPermissions": {
+                          "type": "string",
+                          "description": "Tagging permissions"
+                        },
+                         "DirectMessages": {
+                          "type": "string",
+                          "description": "Direct messages"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  } 
+  
+  
+ 
+  
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
