@@ -7,7 +7,7 @@
     },
     "servers": [
       {
-        "url": "https://institutionconnect.com",
+        "url": "https://ic.up.railway.app",
         "description": "Production server"
       },
       {
