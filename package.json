@@ -4,7 +4,7 @@
   "description": "Microservice for user authentication and management",
   "main": "serverupdate.js",
   "scripts": {
-    "start": "/home/instcsox/nodevenv/iconnectxs/20/bin/node serverupdate.js"
+    "start": "node serverupdate.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
