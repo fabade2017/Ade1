@@ -7,7 +7,7 @@
     },
     "servers": [
       {
-        "url": "https://ic.up.railway.app",
+        "url": "https://ic.up.railway.app/api",
         "description": "Production server"
       },
       {
