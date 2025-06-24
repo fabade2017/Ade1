@@ -15,7 +15,7 @@ const swaggerUI = require('swagger-ui-express');
 const db = require('./db'); // your pool module
 //const transporter = require('./mailer'); // your nodemailer config
 //const db = require('./db'); // your database connection
-dotenv.config();
+//dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
