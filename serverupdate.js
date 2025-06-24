@@ -18,7 +18,19 @@ const db = require('./db'); // your database connection
 //dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:7000',
+    'https://ic.up.railway.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+};
+
+
+
+app.use(cors(corsOptions));
 // Setup Swagger
 
 // // Database connection
