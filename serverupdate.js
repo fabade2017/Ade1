@@ -1798,6 +1798,6 @@ app.delete('/usersms/departments/:id', (req, res) => {
 //console.log(JSON.stringify(app));
 setupSwagger(app);
 //app.use('/usersms/swagger/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-const PORT = 7000;
+const PORT = 54276;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
