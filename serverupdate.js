@@ -29,13 +29,13 @@ app.use(cors());
 //     database: process.env.DB_NAME
 // });
 
-db.connect(err => {
-    if (err) {
-        console.error('Database connection failed:', err);
-    } else {
-        console.log('Connected to MySQL database');
-    }
-});
+// db.connect(err => {
+//     if (err) {
+//         console.error('Database connection failed:', err);
+//     } else {
+//         console.log('Connected to MySQL database');
+//     }
+// });
 // Middleware to protect routes
 const authenticate = (req, res, next) => {
     const token = req.header('Authorization');
