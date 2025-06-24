@@ -12,7 +12,7 @@ const swaggerUI = require('swagger-ui-express');
  const nodemailer = require('nodemailer');
  const setupSwagger = require('./swagger');
 // const { randomInt } = require('crypto');
-
+const db = require('./db'); // your pool module
 //const transporter = require('./mailer'); // your nodemailer config
 //const db = require('./db'); // your database connection
 dotenv.config();
@@ -21,13 +21,13 @@ app.use(express.json());
 app.use(cors());
 // Setup Swagger
 
-// Database connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
+// // Database connection
+// const db = mysql.createConnection({
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     database: process.env.DB_NAME
+// });
 
 db.connect(err => {
     if (err) {
