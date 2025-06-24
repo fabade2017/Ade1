@@ -14,7 +14,7 @@ const swaggerUI = require('swagger-ui-express');
 // const { randomInt } = require('crypto');
 //const db = require('./db'); // your pool module
 //const transporter = require('./mailer'); // your nodemailer config
-//const db = require('./db'); // your database connection
+const db = require('./db'); // your database connection
 //dotenv.config();
 const app = express();
 app.use(express.json());
@@ -22,20 +22,20 @@ app.use(cors());
 // Setup Swagger
 
 // // Database connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
+// const db = mysql.createConnection({
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     database: process.env.DB_NAME
+// });
 
-db.connect(err => {
-    if (err) {
-        console.error('Database connection failed:', err);
-    } else {
-        console.log('Connected to MySQL database');
-    }
-});
+// db.connect(err => {
+//     if (err) {
+//         console.error('Database connection failed:', err);
+//     } else {
+//         console.log('Connected to MySQL database');
+//     }
+// });
 // Middleware to protect routes
 const authenticate = (req, res, next) => {
     const token = req.header('Authorization');
@@ -1798,6 +1798,6 @@ app.delete('/usersms/departments/:id', (req, res) => {
 //console.log(JSON.stringify(app));
 setupSwagger(app);
 //app.use('/usersms/swagger/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-const PORT = 54276;
+const PORT = 7000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
