@@ -1800,4 +1800,4 @@ setupSwagger(app);
 //app.use('/usersms/swagger/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const PORT = 7000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-''
+
