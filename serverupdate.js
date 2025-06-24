@@ -89,7 +89,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
     const { email, password } = req.body;
  // return res.json({ status: "error", message: "Invalid credentials" });
     db.query(
-        'SELECT id, password, verified, role  FROM users WHERE email = ?',
+        'SELECT user_id, password, verified, role  FROM users WHERE email = ?',
         [email],
         async (err, results) => {
             if (err) return res.status(400).json({ status: "error", message: "err.message" });
