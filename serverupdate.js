@@ -12,7 +12,7 @@ const swaggerUI = require('swagger-ui-express');
  const nodemailer = require('nodemailer');
  const setupSwagger = require('./swagger');
 // const { randomInt } = require('crypto');
-const db = require('./db'); // your pool module
+//const db = require('./db'); // your pool module
 //const transporter = require('./mailer'); // your nodemailer config
 //const db = require('./db'); // your database connection
 //dotenv.config();
@@ -22,20 +22,20 @@ app.use(cors());
 // Setup Swagger
 
 // // Database connection
-// const db = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_NAME
-// });
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
 
-// db.connect(err => {
-//     if (err) {
-//         console.error('Database connection failed:', err);
-//     } else {
-//         console.log('Connected to MySQL database');
-//     }
-// });
+db.connect(err => {
+    if (err) {
+        console.error('Database connection failed:', err);
+    } else {
+        console.log('Connected to MySQL database');
+    }
+});
 // Middleware to protect routes
 const authenticate = (req, res, next) => {
     const token = req.header('Authorization');
