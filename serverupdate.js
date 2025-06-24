@@ -20,8 +20,8 @@ const app = express();
 app.use(express.json());
 const corsOptions = {
   origin: [
-    'http://localhost:7000',
-    'https://ic.up.railway.app'
+   
+    'https://ic.up.railway.app', 'http://localhost:7000'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -1810,7 +1810,7 @@ app.delete('/usersms/departments/:id', (req, res) => {
 //console.log(JSON.stringify(app));
 setupSwagger(app);
 //app.use('/usersms/swagger/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-const PORT = process.env.PORT || 3000;
+const PORT = 7000;
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
