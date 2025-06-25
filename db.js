@@ -27,16 +27,16 @@ console.log("Attempting to connect to DB with config:", {
 const pool = mysql.createPool(config);
 
 // You can test the connection on startup
-pool.getConnection()
-  .then(connection => {
-    console.log('Database connection successful!');
-    connection.release(); // Release the connection immediately
-  })
-  .catch(err => {
-    console.error('Failed to establish initial database connection:', err);
-    // You might want to exit the process if critical db connection fails
-    // process.exit(1);
-  });
+// pool.getConnection()
+//   .then(connection => {
+//     console.log('Database connection successful!');
+//     connection.release(); // Release the connection immediately
+//   })
+//   .catch(err => {
+//     console.error('Failed to establish initial database connection:', err);
+//     // You might want to exit the process if critical db connection fails
+//     // process.exit(1);
+//   });
 
 module.exports = pool; // Export the pool for use in controllers
 /*
