@@ -87,7 +87,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
   
             app.post('/usersms/login', (req, res) => {
     const { email, password } = req.body;
- // return res.json({ status: "error", message: "Invalid credentials" });
+ // return res.json({ status: "error", message: "Invalid credentials" }); 
     db.query(
         'SELECT id, password, verified, role  FROM users WHERE email = ?',
         [email],
